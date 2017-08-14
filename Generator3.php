@@ -1,15 +1,21 @@
 <?php
-function gen()
+//Пример генератора, обменивающегося значением по ссылке
+//через переменную channel, как через канал
+function &square()
 {
-	$a = 1;
-	yield $a;
-}
-
-
-for($i=0;$i<100;$i++) {
+	$counter = 0;
+	$channel = 0;
 	
-	die(var_dump(each(gen())));
-	[$key, $value] = each(gen());
-	echo "$key=>$value";
+	for($counter = 0; $counter<5; $counter++) {
+		echo "counter=$counter\n";
+		$channel = $channel*$channel;
+		yield $channel;
+	}
 }
 
+$number = 0;
+foreach(square() as &$channel) {
+	echo "$number*$number=$channel\n";
+	$number = rand(0,100);
+	$channel = $number;
+}
